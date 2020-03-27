@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright 2004 The WebRTC Project Authors. All rights reserved.
  *
  *  Use of this source code is governed by a BSD-style license
@@ -79,7 +79,7 @@ class BufferT {
 
   BufferT(size_t size, size_t capacity)
       : size_(size),
-        capacity_(std::max(size, capacity)),
+        capacity_((std::max)(size, capacity)),
         data_(new T[capacity_]) {
     RTC_DCHECK(IsConsistent());
   }
@@ -312,7 +312,7 @@ class BufferT {
     // https://github.com/facebook/folly/blob/master/folly/docs/FBVector.md and
     // http://www.gahcep.com/cpp-internals-stl-vector-part-1/.
     const size_t new_capacity =
-        extra_headroom ? std::max(capacity, capacity_ + capacity_ / 2)
+        extra_headroom ? (std::max)(capacity, capacity_ + capacity_ / 2)
                        : capacity;
 
     std::unique_ptr<T[]> new_data(new T[new_capacity]);

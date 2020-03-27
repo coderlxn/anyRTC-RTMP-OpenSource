@@ -1,4 +1,4 @@
-// sigslot.h: Signal/Slot classes
+﻿// sigslot.h: Signal/Slot classes
 //
 // Written by Sarah Thompson (sarah@telergy.com) 2002.
 //
@@ -271,7 +271,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base0() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit() = 0;
+                virtual void Emit() = 0;
 		virtual _connection_base0* clone() = 0;
 		virtual _connection_base0* duplicate(has_slots_interface* pnewdest) = 0;
 	};
@@ -282,7 +282,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base1() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type) = 0;
+                virtual void Emit(arg1_type) = 0;
 		virtual _connection_base1<arg1_type, mt_policy>* clone() = 0;
 		virtual _connection_base1<arg1_type, mt_policy>* duplicate(has_slots_interface* pnewdest) = 0;
 	};
@@ -293,7 +293,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base2() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type, arg2_type) = 0;
+                virtual void Emit(arg1_type, arg2_type) = 0;
 		virtual _connection_base2<arg1_type, arg2_type, mt_policy>* clone() = 0;
 		virtual _connection_base2<arg1_type, arg2_type, mt_policy>* duplicate(has_slots_interface* pnewdest) = 0;
 	};
@@ -304,7 +304,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base3() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type, arg2_type, arg3_type) = 0;
+                virtual void Emit(arg1_type, arg2_type, arg3_type) = 0;
 		virtual _connection_base3<arg1_type, arg2_type, arg3_type, mt_policy>* clone() = 0;
 		virtual _connection_base3<arg1_type, arg2_type, arg3_type, mt_policy>* duplicate(has_slots_interface* pnewdest) = 0;
 	};
@@ -315,7 +315,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base4() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type, arg2_type, arg3_type, arg4_type) = 0;
+                virtual void Emit(arg1_type, arg2_type, arg3_type, arg4_type) = 0;
 		virtual _connection_base4<arg1_type, arg2_type, arg3_type, arg4_type, mt_policy>* clone() = 0;
 		virtual _connection_base4<arg1_type, arg2_type, arg3_type, arg4_type, mt_policy>* duplicate(has_slots_interface* pnewdest) = 0;
 	};
@@ -327,7 +327,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base5() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type, arg2_type, arg3_type, arg4_type,
+                virtual void Emit(arg1_type, arg2_type, arg3_type, arg4_type,
 			arg5_type) = 0;
 		virtual _connection_base5<arg1_type, arg2_type, arg3_type, arg4_type,
 			arg5_type, mt_policy>* clone() = 0;
@@ -342,7 +342,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base6() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type, arg2_type, arg3_type, arg4_type, arg5_type,
+                virtual void Emit(arg1_type, arg2_type, arg3_type, arg4_type, arg5_type,
 			arg6_type) = 0;
 		virtual _connection_base6<arg1_type, arg2_type, arg3_type, arg4_type,
 			arg5_type, arg6_type, mt_policy>* clone() = 0;
@@ -357,7 +357,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base7() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type, arg2_type, arg3_type, arg4_type, arg5_type,
+                virtual void Emit(arg1_type, arg2_type, arg3_type, arg4_type, arg5_type,
 			arg6_type, arg7_type) = 0;
 		virtual _connection_base7<arg1_type, arg2_type, arg3_type, arg4_type,
 			arg5_type, arg6_type, arg7_type, mt_policy>* clone() = 0;
@@ -372,7 +372,7 @@ namespace sigslot {
 	public:
 		virtual ~_connection_base8() {}
 		virtual has_slots_interface* getdest() const = 0;
-		virtual void emit(arg1_type, arg2_type, arg3_type, arg4_type, arg5_type,
+                virtual void Emit(arg1_type, arg2_type, arg3_type, arg4_type, arg5_type,
 			arg6_type, arg7_type, arg8_type) = 0;
 		virtual _connection_base8<arg1_type, arg2_type, arg3_type, arg4_type,
 			arg5_type, arg6_type, arg7_type, arg8_type, mt_policy>* clone() = 0;
@@ -1756,7 +1756,7 @@ namespace sigslot {
 			return new _connection0<dest_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit()
+                virtual void Emit()
 		{
 			(m_pobject->*m_pmemfun)();
 		}
@@ -1801,7 +1801,7 @@ namespace sigslot {
 			return new _connection1<dest_type, arg1_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1)
+                virtual void Emit(arg1_type a1)
 		{
 			(m_pobject->*m_pmemfun)(a1);
 		}
@@ -1847,7 +1847,7 @@ namespace sigslot {
 			return new _connection2<dest_type, arg1_type, arg2_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1, arg2_type a2)
+                virtual void Emit(arg1_type a1, arg2_type a2)
 		{
 			(m_pobject->*m_pmemfun)(a1, a2);
 		}
@@ -1893,7 +1893,7 @@ namespace sigslot {
 			return new _connection3<dest_type, arg1_type, arg2_type, arg3_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1, arg2_type a2, arg3_type a3)
+                virtual void Emit(arg1_type a1, arg2_type a2, arg3_type a3)
 		{
 			(m_pobject->*m_pmemfun)(a1, a2, a3);
 		}
@@ -1941,7 +1941,7 @@ namespace sigslot {
 			return new _connection4<dest_type, arg1_type, arg2_type, arg3_type, arg4_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1, arg2_type a2, arg3_type a3,
+                virtual void Emit(arg1_type a1, arg2_type a2, arg3_type a3,
 			arg4_type a4)
 		{
 			(m_pobject->*m_pmemfun)(a1, a2, a3, a4);
@@ -1995,7 +1995,7 @@ namespace sigslot {
 				arg5_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                virtual void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5)
 		{
 			(m_pobject->*m_pmemfun)(a1, a2, a3, a4, a5);
@@ -2049,7 +2049,7 @@ namespace sigslot {
 				arg5_type, arg6_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                virtual void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5, arg6_type a6)
 		{
 			(m_pobject->*m_pmemfun)(a1, a2, a3, a4, a5, a6);
@@ -2103,7 +2103,7 @@ namespace sigslot {
 				arg5_type, arg6_type, arg7_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                virtual void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5, arg6_type a6, arg7_type a7)
 		{
 			(m_pobject->*m_pmemfun)(a1, a2, a3, a4, a5, a6, a7);
@@ -2159,7 +2159,7 @@ namespace sigslot {
 				arg5_type, arg6_type, arg7_type, arg8_type, mt_policy>((dest_type *)pnewdest, m_pmemfun);
 		}
 
-		virtual void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                virtual void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5, arg6_type a6, arg7_type a7, arg8_type a8)
 		{
 			(m_pobject->*m_pmemfun)(a1, a2, a3, a4, a5, a6, a7, a8);
@@ -2205,7 +2205,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit()
+                void Emit()
 		{
 			lock_block<mt_policy> lock(this);
 			typename connections_list::const_iterator itNext, it = m_connected_slots.begin();
@@ -2216,7 +2216,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit();
+                                (*it)->Emit();
 
 				it = itNext;
 			}
@@ -2233,7 +2233,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit();
+                                (*it)->Emit();
 
 				it = itNext;
 			}
@@ -2269,7 +2269,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1)
+                void Emit(arg1_type a1)
 		{
 			lock_block<mt_policy> lock(this);
 			typename connections_list::const_iterator itNext, it = m_connected_slots.begin();
@@ -2280,7 +2280,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1);
+                                (*it)->Emit(a1);
 
 				it = itNext;
 			}
@@ -2297,7 +2297,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1);
+                                (*it)->Emit(a1);
 
 				it = itNext;
 			}
@@ -2334,7 +2334,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1, arg2_type a2)
+                void Emit(arg1_type a1, arg2_type a2)
 		{
 			lock_block<mt_policy> lock(this);
 			typename connections_list::const_iterator itNext, it = m_connected_slots.begin();
@@ -2345,7 +2345,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2);
+                                (*it)->Emit(a1, a2);
 
 				it = itNext;
 			}
@@ -2362,7 +2362,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2);
+                                (*it)->Emit(a1, a2);
 
 				it = itNext;
 			}
@@ -2400,7 +2400,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1, arg2_type a2, arg3_type a3)
+                void Emit(arg1_type a1, arg2_type a2, arg3_type a3)
 		{
 			lock_block<mt_policy> lock(this);
 			typename connections_list::const_iterator itNext, it = m_connected_slots.begin();
@@ -2411,7 +2411,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3);
+                                (*it)->Emit(a1, a2, a3);
 
 				it = itNext;
 			}
@@ -2428,7 +2428,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3);
+                                (*it)->Emit(a1, a2, a3);
 
 				it = itNext;
 			}
@@ -2467,7 +2467,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4)
+                void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4)
 		{
 			lock_block<mt_policy> lock(this);
 			typename connections_list::const_iterator itNext, it = m_connected_slots.begin();
@@ -2478,7 +2478,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4);
+                                (*it)->Emit(a1, a2, a3, a4);
 
 				it = itNext;
 			}
@@ -2495,7 +2495,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4);
+                                (*it)->Emit(a1, a2, a3, a4);
 
 				it = itNext;
 			}
@@ -2537,7 +2537,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5)
 		{
 			lock_block<mt_policy> lock(this);
@@ -2549,7 +2549,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5);
+                                (*it)->Emit(a1, a2, a3, a4, a5);
 
 				it = itNext;
 			}
@@ -2567,7 +2567,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5);
+                                (*it)->Emit(a1, a2, a3, a4, a5);
 
 				it = itNext;
 			}
@@ -2611,7 +2611,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5, arg6_type a6)
 		{
 			lock_block<mt_policy> lock(this);
@@ -2623,7 +2623,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5, a6);
+                                (*it)->Emit(a1, a2, a3, a4, a5, a6);
 
 				it = itNext;
 			}
@@ -2641,7 +2641,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5, a6);
+                                (*it)->Emit(a1, a2, a3, a4, a5, a6);
 
 				it = itNext;
 			}
@@ -2686,7 +2686,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5, arg6_type a6, arg7_type a7)
 		{
 			lock_block<mt_policy> lock(this);
@@ -2698,7 +2698,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5, a6, a7);
+                                (*it)->Emit(a1, a2, a3, a4, a5, a6, a7);
 
 				it = itNext;
 			}
@@ -2716,7 +2716,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5, a6, a7);
+                                (*it)->Emit(a1, a2, a3, a4, a5, a6, a7);
 
 				it = itNext;
 			}
@@ -2762,7 +2762,7 @@ namespace sigslot {
 			pclass->signal_connect(this);
 		}
 
-		void emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
+                void Emit(arg1_type a1, arg2_type a2, arg3_type a3, arg4_type a4,
 			arg5_type a5, arg6_type a6, arg7_type a7, arg8_type a8)
 		{
 			lock_block<mt_policy> lock(this);
@@ -2774,7 +2774,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5, a6, a7, a8);
+                                (*it)->Emit(a1, a2, a3, a4, a5, a6, a7, a8);
 
 				it = itNext;
 			}
@@ -2792,7 +2792,7 @@ namespace sigslot {
 				itNext = it;
 				++itNext;
 
-				(*it)->emit(a1, a2, a3, a4, a5, a6, a7, a8);
+                                (*it)->Emit(a1, a2, a3, a4, a5, a6, a7, a8);
 
 				it = itNext;
 			}

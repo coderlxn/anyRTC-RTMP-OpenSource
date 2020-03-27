@@ -82,7 +82,7 @@ class H264VideoToolboxEncoder : public H264Encoder {
   uint32_t encoder_bitrate_bps_;
   int32_t width_;
   int32_t height_;
-  int32_t fps_;
+
   rtc::CriticalSection quality_scaler_crit_;
   QualityScaler quality_scaler_ GUARDED_BY(quality_scaler_crit_);
   H264BitstreamParser h264_bitstream_parser_;

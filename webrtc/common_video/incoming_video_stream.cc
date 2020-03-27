@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -29,10 +29,11 @@ IncomingVideoStream::IncomingVideoStream(
   RTC_DCHECK(external_callback_);
 
   render_thread_checker_.DetachFromThread();
+  decoder_thread_checker_.DetachFromThread();
 
-  deliver_buffer_event_->StartTimer(false, kEventStartupTimeMs);
   incoming_render_thread_.Start();
   incoming_render_thread_.SetPriority(rtc::kRealtimePriority);
+  deliver_buffer_event_->StartTimer(false, kEventStartupTimeMs);
 }
 
 IncomingVideoStream::~IncomingVideoStream() {
@@ -49,8 +50,7 @@ IncomingVideoStream::~IncomingVideoStream() {
 }
 
 void IncomingVideoStream::OnFrame(const VideoFrame& video_frame) {
-  // Most of the time we'll be on a decoder thread here, but when using
-  // VideoToolbox on iOS, we'll get called on a thread from a thread pool.
+  RTC_DCHECK_RUN_ON(&decoder_thread_checker_);
 
   // Hand over or insert frame.
   rtc::CritScope csB(&buffer_critsect_);

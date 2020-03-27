@@ -16,6 +16,7 @@
 * your programs, too.
 * See the GNU LICENSE file for more info.
 */
+#include <iostream>
 #include "anyrtmpstreamer.h"
 #include "webrtc/media/base/videocommon.h"
 #include "webrtc/media/engine/webrtcvideocapturerfactory.h"

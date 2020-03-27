@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="audio_device">
@@ -141,6 +141,9 @@
     <ClInclude Include="audio_device\dummy\audio_device_dummy.h">
       <Filter>audio_device\dummy</Filter>
     </ClInclude>
+    <ClCompile Include="audio_device\dummy\file_audio_device.cc">
+      <Filter>audio_device\dummy</Filter>
+    </ClCompile>
     <ClInclude Include="audio_device\dummy\file_audio_device.h">
       <Filter>audio_device\dummy</Filter>
     </ClInclude>
@@ -150,6 +153,9 @@
     <ClInclude Include="audio_device\fine_audio_buffer.h">
       <Filter>audio_device</Filter>
     </ClInclude>
+    <ClCompile Include="audio_device\dummy\file_audio_device_factory.cc">
+      <Filter>audio_device\dummy</Filter>
+    </ClCompile>
     <ClInclude Include="audio_device\dummy\file_audio_device_factory.h">
       <Filter>audio_device\dummy</Filter>
     </ClInclude>
@@ -177,6 +183,6 @@
     <ClInclude Include="audio_device\win\audio_mixer_manager_win.h">
       <Filter>audio_device\win</Filter>
     </ClInclude>
-    <None Include="modules.gyp" />
+    <None Include="modules.gyp"/>
   </ItemGroup>
 </Project>

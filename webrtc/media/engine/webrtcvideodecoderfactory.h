@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2013 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -20,21 +20,12 @@ class VideoDecoder;
 
 namespace cricket {
 
-struct VideoDecoderParams {
-  std::string receive_stream_id;
-};
-
 class WebRtcVideoDecoderFactory {
  public:
   // Caller takes the ownership of the returned object and it should be released
   // by calling DestroyVideoDecoder().
   virtual webrtc::VideoDecoder* CreateVideoDecoder(
       webrtc::VideoCodecType type) = 0;
-  virtual webrtc::VideoDecoder* CreateVideoDecoderWithParams(
-      webrtc::VideoCodecType type,
-      VideoDecoderParams params) {
-    return CreateVideoDecoder(type);
-  }
   virtual ~WebRtcVideoDecoderFactory() {}
 
   virtual void DestroyVideoDecoder(webrtc::VideoDecoder* decoder) = 0;

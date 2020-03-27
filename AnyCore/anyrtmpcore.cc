@@ -1,4 +1,4 @@
-/*
+﻿/*
 *  Copyright (c) 2016 The AnyRTC project authors. All Rights Reserved.
 *
 *  Please visit https://www.anyrtc.io for detail.
@@ -16,6 +16,7 @@
 * your programs, too.
 * See the GNU LICENSE file for more info.
 */
+#include <iostream>
 #include "anyrtmpcore.h"
 #include "webrtc/modules/audio_device/audio_device_impl.h"
 #include "webrtc/base/logging.h"
@@ -24,6 +25,8 @@
 #else
 #include <unistd.h>
 #endif
+
+//#include "AudioCaptureModule.h"
 
 static const size_t kMaxDataSizeSamples = 3840;
 static const uint32_t kMaxAacSizeSamples = 1920;
@@ -44,19 +47,28 @@ AnyRtmpCore::AnyRtmpCore()
 	rtc::Thread::Start();
 
 	audio_device_ptr_ = AudioDeviceModuleImpl::Create(0, AudioDeviceModule::kPlatformDefaultAudio);
+	//audio_device_ptr_ = webrtc::AudioCaptureModule::Create(0, AudioDeviceModule::kWindowsCoreAudio);
 	audio_device_ptr_->Init();
 	audio_device_ptr_->AddRef();
-	if (audio_device_ptr_->BuiltInAECIsAvailable())
+	std::cout << "build in aec availabele : " << audio_device_ptr_->BuiltInAECIsAvailable() << std::endl;
+	if (audio_device_ptr_->BuiltInAECIsAvailable()) {		
 		audio_device_ptr_->EnableBuiltInAEC(false);
+	}		
 	if (audio_device_ptr_->BuiltInAGCIsAvailable())
 		audio_device_ptr_->EnableBuiltInAGC(false);
 	if (audio_device_ptr_->BuiltInNSIsAvailable())
 		audio_device_ptr_->EnableBuiltInNS(false);
 	audio_device_ptr_->RegisterAudioCallback(this);
+
+	bool boostavailable = false;
+	audio_device_ptr_->MicrophoneBoostIsAvailable(&boostavailable);
+	std::cout << "MicrophoneBoostIsAvailable : " << boostavailable << std::endl;
+	
+
 	// Initialize the default microphone
 #ifdef WIN32
 	if (audio_device_ptr_->SetRecordingDevice(
-		AudioDeviceModule::kDefaultCommunicationDevice) != 0) {
+                AudioDeviceModule::kDefaultCommunicationDevice) != 0) {
 		audio_device_ptr_->InitMicrophone();
 	}
 #endif
@@ -87,6 +99,41 @@ AnyRtmpCore::~AnyRtmpCore()
 		rtc::Thread::Stop();
 	}
 }
+
+rtc::scoped_refptr<webrtc::AudioDeviceModule> AnyRtmpCore::getAudioDeviceManager()
+{
+	return audio_device_ptr_;
+}
+
+//int16_t AnyRtmpCore::GetAudioDevicesNum()
+//{
+//	return audio_device_ptr_->RecordingDevices();
+//}
+//
+//void AnyRtmpCore::GetDevicesName(std::map<std::string, std::string> &deviceNames)
+//{
+//	deviceNames.clear();
+//	int num = audio_device_ptr_->RecordingDevices();
+//	for (int i = 0; i < num; ++i) {
+//		char name[webrtc::kAdmMaxDeviceNameSize];
+//		char guid[webrtc::kAdmMaxGuidSize];
+//		audio_device_ptr_->RecordingDeviceName(i, name, guid);
+//		deviceNames.insert(std::string(guid), std::string(name));
+//	}
+//}
+//
+//void AnyRtmpCore::SetRecordingDevice(const std::string &deviceGuid)
+//{
+//	int num = audio_device_ptr_->RecordingDevices();
+//	for (int i = 0; i < num; ++i) {
+//		char name[webrtc::kAdmMaxDeviceNameSize];
+//		char guid[webrtc::kAdmMaxGuidSize];
+//		audio_device_ptr_->RecordingDeviceName(i, name, guid);
+//		if (deviceGuid.compare(guid) == 0) {
+//			audio_device_ptr_->SetRecordingDevice(i);
+//		}
+//	}
+//}
 
 void AnyRtmpCore::SetExternalVideoEncoderFactory(cricket::WebRtcVideoEncoderFactory* factory)
 {
@@ -130,6 +177,7 @@ void AnyRtmpCore::StartAudioRecord(AVAudioRecordCallback* callback, int sampleHz
 	
 	if (!audio_device_ptr_->Recording()) {
 		audio_device_ptr_->InitRecording();
+		audio_device_ptr_->SetStereoRecording(true);
 		audio_device_ptr_->StartRecording();
 	}
 	
@@ -161,12 +209,14 @@ void AnyRtmpCore::StartAudioTrack(AVAudioTrackCallback* callback)
 
 void AnyRtmpCore::StopAudioTrack()
 {
+	{
+		rtc::CritScope cs(&cs_audio_track_);
+		audio_track_callback_ = NULL;
+	}
+
     if (audio_device_ptr_->Playing()) {
         audio_device_ptr_->StopPlayout();
-    }
-    
-	rtc::CritScope cs(&cs_audio_track_);
-	audio_track_callback_ = NULL;
+    }   	
 }
 
 int32_t AnyRtmpCore::RecordedDataIsAvailable(const void* audioSamples, const size_t nSamples,

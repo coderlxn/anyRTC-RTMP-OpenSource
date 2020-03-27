@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -382,10 +382,6 @@ int32_t H264EncoderImpl::Encode(const VideoFrame& input_frame,
   return WEBRTC_VIDEO_CODEC_OK;
 }
 
-const char* H264EncoderImpl::ImplementationName() const {
-  return "OpenH264";
-}
-
 bool H264EncoderImpl::IsInitialized() const {
   return openh264_encoder_ != nullptr;
 }
@@ -441,8 +437,6 @@ SEncParamExt H264EncoderImpl::CreateEncoderParams() const {
       encoder_params.iMaxBitrate;
   // Slice num according to number of threads.
   encoder_params.sSpatialLayers[0].sSliceCfg.uiSliceMode = SM_AUTO_SLICE;
-  //@Eric -- add for CONSTANT_ID(sps,pps)
-  encoder_params.eSpsPpsIdStrategy = CONSTANT_ID;
 
   return encoder_params;
 }

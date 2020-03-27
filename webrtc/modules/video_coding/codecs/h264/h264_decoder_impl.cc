@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -92,7 +92,7 @@ int H264DecoderImpl::AVGetBuffer2(
   H264DecoderImpl* decoder = static_cast<H264DecoderImpl*>(context->opaque);
   // DCHECK values set in |InitDecode|.
   RTC_DCHECK(decoder);
-  //* RTC_DCHECK_EQ(context->pix_fmt, kPixelFormat);	//@Eric - for sometimes AV_PIX_FMT_YUVJ420P
+  RTC_DCHECK_EQ(context->pix_fmt, kPixelFormat);
   // Necessary capability to be allowed to provide our own buffers.
   RTC_DCHECK(context->codec->capabilities | AV_CODEC_CAP_DR1);
 
@@ -393,10 +393,6 @@ int32_t H264DecoderImpl::Decode(const EncodedImage& input_image,
     return ret;
   }
   return WEBRTC_VIDEO_CODEC_OK;
-}
-
-const char* H264DecoderImpl::ImplementationName() const {
-  return "FFmpeg";
 }
 
 bool H264DecoderImpl::IsInitialized() const {

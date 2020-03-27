@@ -18,6 +18,8 @@
 */
 #ifndef __ANY_RTMP_CORE_H__
 #define __ANY_RTMP_CORE_H__
+#include <map>
+#include <string>
 #include "webrtc/base/criticalsection.h"
 #include "webrtc/base/scoped_ptr.h"
 #include "webrtc/base/thread.h"
@@ -57,6 +59,8 @@ public:
 
 	void StartAudioRecord(AVAudioRecordCallback* callback, int sampleHz, int channel);
 	void StopAudioRecord();
+
+	rtc::scoped_refptr<webrtc::AudioDeviceModule> getAudioDeviceManager();
 
 	void StartAudioTrack(AVAudioTrackCallback* callback);
 	void StopAudioTrack();
