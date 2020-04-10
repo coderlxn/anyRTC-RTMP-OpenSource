@@ -172,6 +172,8 @@
     <ClCompile Include="aacencode.cc" />
     <ClCompile Include="AudioCaptureCore.cpp" />
     <ClCompile Include="AudioCaptureModule.cpp" />
+    <ClCompile Include="audio_capture_core_win.cc" />
+    <ClCompile Include="audio_device_capture_impl.cc" />
     <ClCompile Include="avcodec.cc" />
     <ClCompile Include="anyrtmpcore.cc" />
     <ClCompile Include="anyrtmplayer.cc" />
@@ -188,6 +190,8 @@
   <ItemGroup>
     <ClInclude Include="AudioCaptureCore.h" />
     <ClInclude Include="AudioCaptureModule.h" />
+    <ClInclude Include="audio_capture_core_win.h" />
+    <ClInclude Include="audio_device_capture_impl.h" />
     <ClInclude Include="avcodec.h" />
     <ClInclude Include="anyrtmpcore.h" />
     <ClInclude Include="anyrtmplayer.h" />

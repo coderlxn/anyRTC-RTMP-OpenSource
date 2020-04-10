@@ -26,7 +26,9 @@
 #include <unistd.h>
 #endif
 
-//#include "AudioCaptureModule.h"
+#include "webrtc\modules\audio_conference_mixer\include\audio_conference_mixer.h"
+
+#include "AudioCaptureModule.h"
 
 static const size_t kMaxDataSizeSamples = 3840;
 static const uint32_t kMaxAacSizeSamples = 1920;
@@ -35,42 +37,50 @@ namespace webrtc {
 AnyRtmpCore::AnyRtmpCore()
 	: running_(false)
 	, audio_device_ptr_(NULL)
+	, audio_capture_ptr_(NULL)
 	, audio_record_callback_(NULL)
-	, audio_record_sample_hz_(44100)
+	, audio_record_sample_hz_(48000)
 	, audio_record_channels_(2)
 	, audio_track_callback_(NULL)
-	, audio_track_sample_hz_(44100)
+	, audio_track_sample_hz_(48000)
 	, audio_track_channels_(2)
 {
 	running_ = true;
 	rtc::Thread::SetName("AnyRTC-RTMP-Core", this);
 	rtc::Thread::Start();
 
+    //audio_device_ptr_ =  AudioDeviceModuleImpl::Create(0, AudioDeviceModule::kWindowsCoreAudio);
 	audio_device_ptr_ = AudioDeviceModuleImpl::Create(0, AudioDeviceModule::kPlatformDefaultAudio);
-	//audio_device_ptr_ = webrtc::AudioCaptureModule::Create(0, AudioDeviceModule::kWindowsCoreAudio);
 	audio_device_ptr_->Init();
 	audio_device_ptr_->AddRef();
-	std::cout << "build in aec availabele : " << audio_device_ptr_->BuiltInAECIsAvailable() << std::endl;
-	if (audio_device_ptr_->BuiltInAECIsAvailable()) {		
-		audio_device_ptr_->EnableBuiltInAEC(false);
-	}		
-	if (audio_device_ptr_->BuiltInAGCIsAvailable())
-		audio_device_ptr_->EnableBuiltInAGC(false);
-	if (audio_device_ptr_->BuiltInNSIsAvailable())
-		audio_device_ptr_->EnableBuiltInNS(false);
+	audio_device_mixer_ptr_.reset(new webrtc::AVAudioMixerParticipant());
 	audio_device_ptr_->RegisterAudioCallback(this);
 
-	bool boostavailable = false;
-	audio_device_ptr_->MicrophoneBoostIsAvailable(&boostavailable);
-	std::cout << "MicrophoneBoostIsAvailable : " << boostavailable << std::endl;
-	
+	/*bgm_enable_ = false;
+
+	audio_capture_ptr_ = webrtc::AudioCaptureModule::NewCreate(0, AudioDeviceModule::kWindowsCoreAudio);
+	audio_capture_ptr_->Init();
+	audio_capture_ptr_->AddRef();
+	audio_capture_mixer_ptr_.reset(new webrtc::AVAudioMixerParticipant());
+	audio_capture_ptr_->RegisterAudioCallback(audio_capture_mixer_ptr_.get());
+
+	audio_mixer_ = webrtc::AudioConferenceMixer::Create(0);
+	audio_mixer_->RegisterMixedStreamCallback(this);
+	audio_mixer_->SetMixabilityStatus(audio_device_mixer_ptr_.get(), true);
+	audio_mixer_->SetMixabilityStatus(audio_capture_mixer_ptr_.get(), true);	*/
 
 	// Initialize the default microphone
 #ifdef WIN32
-	if (audio_device_ptr_->SetRecordingDevice(
-                AudioDeviceModule::kDefaultCommunicationDevice) != 0) {
+	if (audio_device_ptr_ && audio_device_ptr_->SetRecordingDevice(AudioDeviceModule::kDefaultCommunicationDevice) != 0) {
+	//if (audio_device_ptr_ && audio_device_ptr_->SetRecordingDevice(AudioDeviceModule::kDefaultDevice) != 0) {
 		audio_device_ptr_->InitMicrophone();
 	}
+
+	//背景声功能使用系统默认的设备
+	/*if (audio_capture_ptr_ && audio_capture_ptr_->SetRecordingDevice(
+		AudioDeviceModule::kDefaultCommunicationDevice) != 0) {
+		audio_capture_ptr_->InitMicrophone();
+	}*/
 #endif
 	
 #ifdef WIN32
@@ -92,6 +102,14 @@ AnyRtmpCore::~AnyRtmpCore()
 		audio_device_ptr_->RegisterAudioCallback(NULL);
 		audio_device_ptr_->Release();
 		audio_device_ptr_ = NULL;
+	}
+
+	if (audio_capture_ptr_) {
+		if (audio_capture_ptr_->Recording())
+			audio_capture_ptr_->StopRecording();
+		audio_capture_ptr_->RegisterAudioCallback(NULL);
+		audio_capture_ptr_->Release();
+		audio_capture_ptr_ = NULL;
 	}
 
 	if (running_) {
@@ -153,7 +171,7 @@ void AnyRtmpCore::Run()
 	while (running_)
 	{
 		{// ProcessMessages
-			this->ProcessMessages(10);
+			this->ProcessMessages(10);			
 		}
 #if WIN32
 		w32_thread.ProcessMessages(1);
@@ -161,6 +179,46 @@ void AnyRtmpCore::Run()
 		usleep(1000);
 #endif
 	}
+}
+
+void AnyRtmpCore::setAudioEnable(bool microphoneEnable, bool bgmEnable)
+{	
+	//声音的合成是通过RecordedDataIsAvailable来控制的，当只有一种声音时，不进行混音	
+	if (microphoneEnable) {
+		if (audio_capture_ptr_) {
+			audio_capture_ptr_->RegisterAudioCallback(audio_capture_mixer_ptr_.get());			
+		}
+		if (audio_device_ptr_ && !audio_device_ptr_->Recording()) {
+			audio_device_ptr_->InitRecording();
+			audio_device_ptr_->SetStereoRecording(true);
+			audio_device_ptr_->StartRecording();
+		}
+	}
+	else {
+		audio_device_ptr_->StopRecording();
+		if (audio_capture_ptr_) {
+			audio_capture_ptr_->RegisterAudioCallback(this);
+		}
+	}
+
+	if (bgmEnable) {
+		audio_capture_ptr_->StartRecording();
+	}
+	else {
+		audio_capture_ptr_->StopRecording();
+	}
+
+	audio_capture_mixer_ptr_->clearAllCache();
+	audio_device_mixer_ptr_->clearAllCache();
+	microphone_enable_ = microphoneEnable;
+	bgm_enable_ = bgmEnable;
+
+	/*if (microphoneEnable && bgmEnable) {
+		if (audio_mixer_ != nullptr) {
+			audio_mixer_->SetMixabilityStatus(audio_device_mixer_ptr_.get(), true);
+			audio_mixer_->SetMixabilityStatus(audio_capture_mixer_ptr_.get(), true);
+		}		
+	}*/
 }
 
 void AnyRtmpCore::StartAudioRecord(AVAudioRecordCallback* callback, int sampleHz, int channel)
@@ -175,10 +233,16 @@ void AnyRtmpCore::StartAudioRecord(AVAudioRecordCallback* callback, int sampleHz
 		audio_record_channels_ = channel;
 	}
 	
-	if (!audio_device_ptr_->Recording()) {
+	if (audio_device_ptr_ && !audio_device_ptr_->Recording()) {
 		audio_device_ptr_->InitRecording();
 		audio_device_ptr_->SetStereoRecording(true);
 		audio_device_ptr_->StartRecording();
+	}
+
+	if (audio_capture_ptr_ && !audio_capture_ptr_->Recording()) {
+		audio_capture_ptr_->InitRecording();
+		audio_capture_ptr_->SetStereoRecording(true);
+		audio_capture_ptr_->StartRecording();
 	}
 	
 }
@@ -189,8 +253,12 @@ void AnyRtmpCore::StopAudioRecord()
 		audio_record_callback_ = NULL;
 	}
 	
-	if (audio_device_ptr_->Recording()) {
+	if (audio_device_ptr_ && audio_device_ptr_->Recording()) {
 		audio_device_ptr_->StopRecording();
+	}
+
+	if (audio_capture_ptr_ && audio_capture_ptr_->Recording()) {
+		audio_capture_ptr_->StopRecording();
 	}
 }
 
@@ -201,9 +269,14 @@ void AnyRtmpCore::StartAudioTrack(AVAudioTrackCallback* callback)
 		audio_track_callback_ = callback;
 	}
 	
-	if (!audio_device_ptr_->Playing()) {
+	if (audio_device_ptr_ && !audio_device_ptr_->Playing()) {
 		audio_device_ptr_->InitPlayout();
 		audio_device_ptr_->StartPlayout();
+	}
+
+	if (audio_capture_ptr_ && !audio_capture_ptr_->Playing()) {
+		audio_capture_ptr_->InitPlayout();
+		audio_capture_ptr_->StartPlayout();
 	}
 }
 
@@ -214,27 +287,46 @@ void AnyRtmpCore::StopAudioTrack()
 		audio_track_callback_ = NULL;
 	}
 
-    if (audio_device_ptr_->Playing()) {
+    if (audio_device_ptr_ && audio_device_ptr_->Playing()) {
         audio_device_ptr_->StopPlayout();
-    }   	
+    }
+
+	if (audio_capture_ptr_ && audio_capture_ptr_->Playing()) {
+		audio_capture_ptr_->StopPlayout();
+	}
 }
 
 int32_t AnyRtmpCore::RecordedDataIsAvailable(const void* audioSamples, const size_t nSamples,
 	const size_t nBytesPerSample, const size_t nChannels, const uint32_t samplesPerSec, const uint32_t totalDelayMS,
 	const int32_t clockDrift, const uint32_t currentMicLevel, const bool keyPressed, uint32_t& newMicLevel)
 {
+	std::cout << "record data avaliable " << nSamples << nBytesPerSample << nChannels << samplesPerSec;
 	rtc::CritScope cs(&cs_audio_record_);
-	if (audio_record_callback_) {
-		if (audio_record_sample_hz_ != samplesPerSec || nChannels != audio_record_channels_) {
-			int16_t temp_output[kMaxDataSizeSamples];
-			int samples_per_channel_int = resampler_record_.Resample10Msec((int16_t*)audioSamples, samplesPerSec * nChannels,
-				audio_record_sample_hz_ * audio_record_channels_, 1, kMaxDataSizeSamples, temp_output);
-			audio_record_callback_->OnRecordAudio(temp_output, audio_record_sample_hz_ / 100, nBytesPerSample, audio_record_channels_, audio_record_sample_hz_, totalDelayMS);
-		}
-		else {
-			audio_record_callback_->OnRecordAudio(audioSamples, nSamples, nBytesPerSample, audio_record_channels_, samplesPerSec, totalDelayMS);
+
+	if (microphone_enable_ && bgm_enable_) {
+		audio_device_mixer_ptr_->RecordedDataIsAvailable(audioSamples, nSamples,
+			nBytesPerSample, nChannels, samplesPerSec, totalDelayMS,
+			clockDrift, currentMicLevel, keyPressed, newMicLevel);
+		if (audio_mixer_) {
+			audio_mixer_->Process();
+		}		
+	}
+	else
+	{
+		// 当只有一种声音时，不进行混音
+		if (audio_record_callback_) {
+			if (audio_record_sample_hz_ != samplesPerSec || nChannels != audio_record_channels_) {
+				int16_t temp_output[kMaxDataSizeSamples];
+				int samples_per_channel_int = resampler_record_.Resample10Msec((int16_t*)audioSamples, samplesPerSec * nChannels,
+					audio_record_sample_hz_ * audio_record_channels_, 1, kMaxDataSizeSamples, temp_output);
+				audio_record_callback_->OnRecordAudio(temp_output, audio_record_sample_hz_ / 100, nBytesPerSample, audio_record_channels_, audio_record_sample_hz_, totalDelayMS);
+			}
+			else {
+				audio_record_callback_->OnRecordAudio(audioSamples, nSamples, nBytesPerSample, audio_record_channels_, samplesPerSec, totalDelayMS);
+			}
 		}
 	}
+		
 	return 0;
 }
 
@@ -271,7 +363,16 @@ int32_t AnyRtmpCore::NeedMorePlayData(const size_t nSamples, const size_t nBytes
 		}
 		
 	}
+
 	return 0;
+}
+
+void AnyRtmpCore::NewMixedAudio(const int32_t id, const AudioFrame& generalAudioFrame, const AudioFrame** uniqueAudioFrames,
+	const uint32_t size) {
+	//从audioframe中读取数据进行编码上传，是混合之后的声音
+	if (audio_record_callback_) {
+		audio_record_callback_->OnRecordAudio(generalAudioFrame.data_, generalAudioFrame.samples_per_channel_, 0, generalAudioFrame.num_channels_, generalAudioFrame.sample_rate_hz_, 0);
+	}
 }
 
 }	// namespace webrtc

@@ -21,6 +21,7 @@
 #include <map>
 #include <string>
 #include "webrtc/base/criticalsection.h"
+#include "webrtc/system_wrappers/include/critical_section_wrapper.h"
 #include "webrtc/base/scoped_ptr.h"
 #include "webrtc/base/thread.h"
 #include "webrtc/common_audio/ring_buffer.h"
@@ -29,6 +30,8 @@
 #include "webrtc/modules/audio_coding/acm2/acm_resampler.h"
 #include "webrtc/modules/audio_device/include/audio_device.h"
 #include "webrtc/modules/audio_device/include/audio_device_defines.h"
+#include "webrtc\modules\audio_conference_mixer\include\audio_conference_mixer_defines.h"
+#include "webrtc/modules/audio_conference_mixer/include/audio_conference_mixer.h"
 
 
 namespace webrtc {
@@ -49,13 +52,85 @@ public:
 	virtual int OnNeedPlayAudio(void* audioSamples, uint32_t& samplesPerSec, size_t& nChannels) = 0;
 };
 
-class AnyRtmpCore : public rtc::Thread, webrtc::AudioTransport
+class AVAudioMixerParticipant : public webrtc::AudioTransport, public webrtc::MixerParticipant
+{
+	//通过AudioTransport接受录音数据，进行缓存，然后通过MixerParticipant进行混音
+public:
+	AVAudioMixerParticipant() {}
+
+	virtual int32_t RecordedDataIsAvailable(const void* audioSamples,
+		const size_t nSamples,
+		const size_t nBytesPerSample,
+		const size_t nChannels,
+		const uint32_t samplesPerSec,
+		const uint32_t totalDelayMS,
+		const int32_t clockDrift,
+		const uint32_t currentMicLevel,
+		const bool keyPressed,
+		uint32_t& newMicLevel) {
+
+		webrtc::CriticalSectionScoped critScoped(&_critSect);
+
+		webrtc::AudioFrame *frame = new webrtc::AudioFrame();
+		frame->UpdateFrame(0, 0, (int16_t*)audioSamples, nSamples, samplesPerSec, webrtc::AudioFrame::kNormalSpeech, webrtc::AudioFrame::kVadActive, nChannels);
+		m_frames.push_back(frame);
+
+		return 0;
+	}
+
+	void clearAllCache() {
+		webrtc::CriticalSectionScoped critScoped(&_critSect);
+		m_frames.clear();
+	}
+
+	virtual AudioFrameInfo GetAudioFrameWithMuted(int32_t id, AudioFrame* audio_frame) {
+		return GetAudioFrame(id, audio_frame) == -1 ?
+			AudioFrameInfo::kError :
+			AudioFrameInfo::kNormal;
+	}
+
+	virtual int32_t GetAudioFrame(int32_t id, AudioFrame* audioFrame) {
+		webrtc::CriticalSectionScoped critScoped(&_critSect);
+		if (m_frames.size() > 0) {
+			audioFrame->CopyFrom(*m_frames.front());
+			delete m_frames.front();
+			m_frames.pop_front();
+			return 0;
+		}
+		return -1;
+	}
+
+	virtual int32_t NeededFrequency(int32_t id) const {
+		return 48000; 
+	}
+
+	//只接收录音进行混音处理
+	virtual int32_t NeedMorePlayData(const size_t nSamples,
+		const size_t nBytesPerSample,
+		const size_t nChannels,
+		const uint32_t samplesPerSec,
+		void* audioSamples,
+		size_t& nSamplesOut,
+		int64_t* elapsed_time_ms,
+		int64_t* ntp_time_ms) {
+		ASSERT(false);
+		return 0;
+	}
+
+private:
+	std::list<webrtc::AudioFrame *> m_frames;
+	CriticalSectionWrapper                 _critSect;
+};
+
+class AnyRtmpCore : public rtc::Thread, webrtc::AudioTransport, webrtc::AudioMixerOutputReceiver
 {
 public:
 	static AnyRtmpCore& Inst() {
 		static AnyRtmpCore avcore;
 		return avcore;
 	}
+
+	void setAudioEnable(bool microphoneEnable, bool bgmEnable);
 
 	void StartAudioRecord(AVAudioRecordCallback* callback, int sampleHz, int channel);
 	void StopAudioRecord();
@@ -81,11 +156,18 @@ protected:
 	virtual int32_t NeedMorePlayData(const size_t nSamples, const size_t nBytesPerSample, const size_t nChannels,
 		const uint32_t samplesPerSec, void* audioSamples, size_t& nSamplesOut, int64_t* elapsed_time_ms, int64_t* ntp_time_ms);
 
+	virtual void NewMixedAudio(const int32_t id, const AudioFrame& generalAudioFrame, const AudioFrame** uniqueAudioFrames,
+		const uint32_t size) override;
+
 protected:
 	AnyRtmpCore();
 	virtual ~AnyRtmpCore();
 	bool					running_;
 	rtc::scoped_refptr<webrtc::AudioDeviceModule>		audio_device_ptr_;
+	rtc::scoped_refptr<webrtc::AudioDeviceModule>		audio_capture_ptr_;
+	rtc::scoped_ptr<webrtc::AVAudioMixerParticipant>    audio_device_mixer_ptr_;
+	rtc::scoped_ptr<webrtc::AVAudioMixerParticipant>    audio_capture_mixer_ptr_;
+	webrtc::AudioConferenceMixer *audio_mixer_ = nullptr;
 	rtc::scoped_ptr<cricket::WebRtcVideoEncoderFactory> video_encoder_factory_;
 
 	//* For audio record
@@ -101,6 +183,9 @@ protected:
 	AVAudioTrackCallback	*audio_track_callback_;
 	int						audio_track_sample_hz_;
 	int						audio_track_channels_;
+
+	bool					microphone_enable_ = true;
+	bool					bgm_enable_ = true;
 };
 
 }	// namespace webrtc
