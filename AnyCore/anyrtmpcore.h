@@ -20,6 +20,8 @@
 #define __ANY_RTMP_CORE_H__
 #include <map>
 #include <string>
+#include <iostream>
+#include <time.h>
 #include "webrtc/base/criticalsection.h"
 #include "webrtc/system_wrappers/include/critical_section_wrapper.h"
 #include "webrtc/base/scoped_ptr.h"
@@ -75,6 +77,17 @@ public:
 		frame->UpdateFrame(0, 0, (int16_t*)audioSamples, nSamples, samplesPerSec, webrtc::AudioFrame::kNormalSpeech, webrtc::AudioFrame::kVadActive, nChannels);
 		m_frames.push_back(frame);
 
+		while (m_frames.size() > 30) {
+			delete m_frames.front();
+			m_frames.pop_front();
+		}
+
+		//std::cout << "bgm audio record available " << m_frames.size() << std::endl;
+
+		time_t timep;
+		time(&timep);
+		m_timestamp = timep;
+
 		return 0;
 	}
 
@@ -95,6 +108,8 @@ public:
 			audioFrame->CopyFrom(*m_frames.front());
 			delete m_frames.front();
 			m_frames.pop_front();
+
+			//std::cout << "bgm audio record pop " << m_frames.size() << std::endl;
 			return 0;
 		}
 		return -1;
@@ -117,8 +132,10 @@ public:
 		return 0;
 	}
 
+	LONGLONG m_timestamp = 0;
+
 private:
-	std::list<webrtc::AudioFrame *> m_frames;
+	std::list<webrtc::AudioFrame *> m_frames;  //
 	CriticalSectionWrapper                 _critSect;
 };
 
@@ -139,6 +156,8 @@ public:
 
 	void StartAudioTrack(AVAudioTrackCallback* callback);
 	void StopAudioTrack();
+
+	bool CheckAudioRecordStatus(); //检查声音录制的状态，主要是对比最后的录制时间
 
 public:
 	void SetExternalVideoEncoderFactory(cricket::WebRtcVideoEncoderFactory* factory);
@@ -186,6 +205,8 @@ protected:
 
 	bool					microphone_enable_ = true;
 	bool					bgm_enable_ = true;
+
+	LONGLONG m_timestamp = 0;
 };
 
 }	// namespace webrtc

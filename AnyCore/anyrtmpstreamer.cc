@@ -144,7 +144,7 @@ void AnyRtmpStreamerImpl::StopStream()
 
 void AnyRtmpStreamerImpl::OnEncodeDataCallback(bool audio, uint8_t *p, uint32_t length, uint32_t ts)
 {
-	std::cout << "rtmp stream encoded data " << audio << ts;
+	//std::cout << "rtmp stream encoded data " << audio << ts << std::endl;
 	if(audio)
 	{
 		OnAACData(p, length, ts);

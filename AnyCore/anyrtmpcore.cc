@@ -50,14 +50,15 @@ AnyRtmpCore::AnyRtmpCore()
 	rtc::Thread::Start();
 
     //audio_device_ptr_ =  AudioDeviceModuleImpl::Create(0, AudioDeviceModule::kWindowsCoreAudio);
+	//Microphone
 	audio_device_ptr_ = AudioDeviceModuleImpl::Create(0, AudioDeviceModule::kPlatformDefaultAudio);
 	audio_device_ptr_->Init();
 	audio_device_ptr_->AddRef();
 	audio_device_mixer_ptr_.reset(new webrtc::AVAudioMixerParticipant());
 	audio_device_ptr_->RegisterAudioCallback(this);
 
-	/*bgm_enable_ = false;
-
+	/*bgm_enable_ = false;*/
+	//BGM
 	audio_capture_ptr_ = webrtc::AudioCaptureModule::NewCreate(0, AudioDeviceModule::kWindowsCoreAudio);
 	audio_capture_ptr_->Init();
 	audio_capture_ptr_->AddRef();
@@ -67,7 +68,7 @@ AnyRtmpCore::AnyRtmpCore()
 	audio_mixer_ = webrtc::AudioConferenceMixer::Create(0);
 	audio_mixer_->RegisterMixedStreamCallback(this);
 	audio_mixer_->SetMixabilityStatus(audio_device_mixer_ptr_.get(), true);
-	audio_mixer_->SetMixabilityStatus(audio_capture_mixer_ptr_.get(), true);	*/
+	audio_mixer_->SetMixabilityStatus(audio_capture_mixer_ptr_.get(), true);
 
 	// Initialize the default microphone
 #ifdef WIN32
@@ -186,6 +187,7 @@ void AnyRtmpCore::setAudioEnable(bool microphoneEnable, bool bgmEnable)
 	//声音的合成是通过RecordedDataIsAvailable来控制的，当只有一种声音时，不进行混音	
 	if (microphoneEnable) {
 		if (audio_capture_ptr_) {
+			std::cout << "audio capture callback set to mixer " << std::endl;
 			audio_capture_ptr_->RegisterAudioCallback(audio_capture_mixer_ptr_.get());			
 		}
 		if (audio_device_ptr_ && !audio_device_ptr_->Recording()) {
@@ -197,6 +199,7 @@ void AnyRtmpCore::setAudioEnable(bool microphoneEnable, bool bgmEnable)
 	else {
 		audio_device_ptr_->StopRecording();
 		if (audio_capture_ptr_) {
+			std::cout << "audio capture callback set to core " << std::endl;
 			audio_capture_ptr_->RegisterAudioCallback(this);
 		}
 	}
@@ -219,6 +222,26 @@ void AnyRtmpCore::setAudioEnable(bool microphoneEnable, bool bgmEnable)
 			audio_mixer_->SetMixabilityStatus(audio_capture_mixer_ptr_.get(), true);
 		}		
 	}*/
+}
+
+bool AnyRtmpCore::CheckAudioRecordStatus()
+{
+	time_t timep;
+	time(&timep);
+
+	//检查最后收到声音的时间，如果是合成音，则检查两个mixer，如果是单音轨则检查 AnyRtmpCore 的时间戳
+	//目前只处理麦克风的声音，背景声在没有音乐播放的情况下会是空白的
+	if (microphone_enable_ && bgm_enable_) {
+		int dt1 = timep - audio_device_mixer_ptr_->m_timestamp;
+		//int dt2 = timep - audio_capture_mixer_ptr_->m_timestamp;
+		//std::cout << "CheckAudioRecordStatus1 " << timep << "  " << dt1 << "  " << dt2 << std::endl;
+		return dt1 < 5;
+	}
+	else if (microphone_enable_)  {
+		//std::cout << "CheckAudioRecordStatus2 " << timep << "  " << m_timestamp << std::endl;
+		return timep - m_timestamp < 5;
+	}
+	return true;
 }
 
 void AnyRtmpCore::StartAudioRecord(AVAudioRecordCallback* callback, int sampleHz, int channel)
@@ -246,6 +269,7 @@ void AnyRtmpCore::StartAudioRecord(AVAudioRecordCallback* callback, int sampleHz
 	}
 	
 }
+
 void AnyRtmpCore::StopAudioRecord()
 {
 	{
@@ -300,7 +324,7 @@ int32_t AnyRtmpCore::RecordedDataIsAvailable(const void* audioSamples, const siz
 	const size_t nBytesPerSample, const size_t nChannels, const uint32_t samplesPerSec, const uint32_t totalDelayMS,
 	const int32_t clockDrift, const uint32_t currentMicLevel, const bool keyPressed, uint32_t& newMicLevel)
 {
-	std::cout << "record data avaliable " << nSamples << nBytesPerSample << nChannels << samplesPerSec;
+	//std::cout << "[-----------] record data avaliable " << nSamples << nBytesPerSample << nChannels << samplesPerSec << std::endl;
 	rtc::CritScope cs(&cs_audio_record_);
 
 	if (microphone_enable_ && bgm_enable_) {
@@ -313,6 +337,10 @@ int32_t AnyRtmpCore::RecordedDataIsAvailable(const void* audioSamples, const siz
 	}
 	else
 	{
+		time_t timep;
+		time(&timep);
+		m_timestamp = timep;
+
 		// 当只有一种声音时，不进行混音
 		if (audio_record_callback_) {
 			if (audio_record_sample_hz_ != samplesPerSec || nChannels != audio_record_channels_) {

@@ -23,7 +23,7 @@
 
 #include <assert.h>
 #include <string.h>
-
+#include <iostream>
 #include <windows.h>
 #include <comdef.h>
 #include <dmo.h>
@@ -2334,6 +2334,8 @@ namespace webrtc {
 
 	int32_t AudioCaptureCore::StopRecording()
 	{
+		//std::cout << "try to stop recording " << _recIsInitialized << std::endl;
+
 		int32_t err = 0;
 
 		if (!_recIsInitialized)
@@ -3562,14 +3564,22 @@ namespace webrtc {
 
 		// >> ---------------------------- THREAD LOOP ----------------------------
 
+		//int t_counter = 0;
 
 			while (keepRecording_)
 			{
+				//++t_counter;
+				//if (t_counter % 1000000 == 0) {
+				//	std::cout << "bgm audio capturing triger" << std::endl;
+				//}					
+
 				BYTE *pData = 0;
 				UINT32 framesAvailable = 0;
 				DWORD flags = 0;
 				UINT64 recTime = 0;
 				UINT64 recPos = 0;
+
+				//std::cout << "bgm audio capturing" << std::endl;
 
 				_Lock();
 
