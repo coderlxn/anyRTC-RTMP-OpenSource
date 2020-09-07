@@ -17,11 +17,9 @@
 #include <vector>
 
 #include "webrtc/api/rtpparameters.h"
-#include "webrtc/base/asyncpacketsocket.h"
 #include "webrtc/base/basictypes.h"
 #include "webrtc/base/buffer.h"
 #include "webrtc/base/copyonwritebuffer.h"
-#include "webrtc/base/criticalsection.h"
 #include "webrtc/base/dscp.h"
 #include "webrtc/base/logging.h"
 #include "webrtc/base/networkroute.h"
@@ -35,6 +33,8 @@
 #include "webrtc/media/base/streamparams.h"
 #include "webrtc/media/base/videosinkinterface.h"
 #include "webrtc/media/base/videosourceinterface.h"
+// TODO(juberti): re-evaluate this include
+#include "webrtc/pc/audiomonitor.h"
 
 namespace rtc {
 class RateLimiter;
@@ -53,12 +53,6 @@ class VideoCapturer;
 class VideoFrame;
 struct RtpHeader;
 struct VideoFormat;
-struct AudioInfo {
-	int input_level;
-	int output_level;
-	typedef std::vector<std::pair<uint32_t, int> > StreamList;
-	StreamList active_streams;  // ssrcs contributing to output_level
-};
 
 const int kScreencastDefaultFps = 5;
 

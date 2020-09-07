@@ -35,6 +35,7 @@ RtmpGuesterImpl::RtmpGuesterImpl(RTMPGuesterEvent&callback)
 	, av_rtmp_started_(NULL)
 	, av_rtmp_player_(NULL)
 	, video_render_(NULL)
+	, audio_enabled_(true)
 {
 	av_rtmp_player_ = AnyRtmplayer::Create(*this);
 }
@@ -61,7 +62,7 @@ void RtmpGuesterImpl::StartRtmpPlay(const char* url, void* render)
 	if (!av_rtmp_started_) {
 		rtmp_url_ = url;
 		av_rtmp_started_ = true;
-		video_render_ = webrtc::VideoRenderer::Create(render, 640, 480);
+		video_render_ = static_cast<rtc::VideoSinkInterface < cricket::VideoFrame >	*>(render); //webrtc::VideoRenderer::Create(render, 720, 1280);
 		av_rtmp_player_->SetVideoRender(video_render_);
 		av_rtmp_player_->StartPlay(url);
 		webrtc::AnyRtmpCore::Inst().StartAudioTrack(this);
@@ -79,6 +80,18 @@ void RtmpGuesterImpl::StopRtmpPlay()
 			delete video_render_;
 			video_render_ = NULL;
 		}
+	}
+}
+
+void RtmpGuesterImpl::SetAudioEnable(bool enabled)
+{
+	if (enabled) {
+		audio_enabled_ = true;
+		webrtc::AnyRtmpCore::Inst().StartAudioTrack(this);		
+	}
+	else {
+		audio_enabled_ = false;
+		webrtc::AnyRtmpCore::Inst().StopAudioTrack();		
 	}
 }
 

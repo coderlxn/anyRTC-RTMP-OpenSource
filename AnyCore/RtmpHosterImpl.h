@@ -39,6 +39,8 @@ public:
 	//* Common function
 	virtual void SetAudioEnable(bool enabled);
 	virtual void SetVideoEnable(bool enabled);
+
+
 	virtual void SetVideoRender(void* render);
 	virtual void SetVideoCapturer(void* handle);
 	virtual void SetVideoMode(RTMPVideoMode videoMode);

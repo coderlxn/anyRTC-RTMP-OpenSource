@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -37,12 +37,12 @@
 #define WEBRTC_ARCH_32_BITS
 #define WEBRTC_ARCH_LITTLE_ENDIAN
 #elif defined(__MIPSEL__)
-#define WEBRTC_ARCH_MIPS_FAMILY
 #if defined(__LP64__)
-#define WEBRTC_ARCH_64_BITS
+#define WEBRTC_ARCH_MIPS64_FAMILY
 #else
-#define WEBRTC_ARCH_32_BITS
+#define WEBRTC_ARCH_MIPS_FAMILY
 #endif
+#define WEBRTC_ARCH_32_BITS
 #define WEBRTC_ARCH_LITTLE_ENDIAN
 #elif defined(__pnacl__)
 #define WEBRTC_ARCH_32_BITS

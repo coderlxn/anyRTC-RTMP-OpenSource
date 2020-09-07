@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -57,6 +57,7 @@ class AudioDeviceModule : public RefCountedModule {
   static rtc::scoped_refptr<AudioDeviceModule> Create(
       const int32_t id,
       const AudioLayer audio_layer);
+
   // Retrieve the currently utilized audio layer
   virtual int32_t ActiveAudioLayer(AudioLayer* audioLayer) const = 0;
 

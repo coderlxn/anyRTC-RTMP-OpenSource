@@ -828,10 +828,7 @@ IPAddress BasicNetworkManager::QueryDefaultLocalAddress(int family) const {
   ASSERT(thread_ == Thread::Current());
   ASSERT(thread_->socketserver() != nullptr);
   ASSERT(family == AF_INET || family == AF_INET6);
-  //@Eric - Don't detect ipv6 for: Connect failed with 10051
-  if (family == AF_INET6)
-	  return IPAddress();
-  //end
+
   std::unique_ptr<AsyncSocket> socket(
       thread_->socketserver()->CreateAsyncSocket(family, SOCK_DGRAM));
   if (!socket) {

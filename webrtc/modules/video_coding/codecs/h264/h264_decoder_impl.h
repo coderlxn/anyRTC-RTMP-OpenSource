@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -51,8 +51,6 @@ class H264DecoderImpl : public H264Decoder {
                  const RTPFragmentationHeader* /*fragmentation*/,
                  const CodecSpecificInfo* codec_specific_info = nullptr,
                  int64_t render_time_ms = -1) override;
-
-  const char* ImplementationName() const override;
 
  private:
   // Called by FFmpeg when it needs a frame buffer to store decoded frames in.

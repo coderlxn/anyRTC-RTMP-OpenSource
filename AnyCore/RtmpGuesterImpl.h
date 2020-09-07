@@ -34,6 +34,8 @@ public:
 	virtual void StartRtmpPlay(const char* url, void* render);
 	virtual void StopRtmpPlay();
 
+	virtual void SetAudioEnable(bool enabled);
+
 	virtual void* GotSelfPtr() { return this; };
 
 protected:
@@ -54,7 +56,9 @@ private:
 	bool				av_rtmp_started_;
 	AnyRtmplayer			*av_rtmp_player_;
 
-	webrtc::VideoRenderer	*video_render_;
+	rtc::VideoSinkInterface < cricket::VideoFrame >	*video_render_;
+
+	bool audio_enabled_;
 };
 
 #endif	// __RTMP_GUSTER_IMPL_H__

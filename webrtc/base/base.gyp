@@ -1,4 +1,4 @@
-# Copyright (c) 2014 The WebRTC@AnyRTC project authors. All Rights Reserved.
+# Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
 #
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file in the root of the source
@@ -90,8 +90,6 @@
         'thread_checker.h',
         'thread_checker_impl.cc',
         'thread_checker_impl.h',
-        'timestampaligner.cc',
-        'timestampaligner.h',
         'timeutils.cc',
         'timeutils.h',
         'trace_event.h',

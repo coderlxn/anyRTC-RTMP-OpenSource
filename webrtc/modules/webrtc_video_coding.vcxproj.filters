@@ -160,6 +160,39 @@
     <Filter Include="video_coding">
       <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video_coding">
+      <UniqueIdentifier>{1D88A297-44EE-A521-DC1A-E408035B4BC1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="video_coding\include\video_coding.h">
@@ -174,9 +207,6 @@
     <ClInclude Include="video_coding\codec_timer.h">
       <Filter>video_coding</Filter>
     </ClInclude>
-    <ClInclude Include="video_coding\content_metrics_processing.h">
-      <Filter>video_coding</Filter>
-    </ClInclude>
     <ClInclude Include="video_coding\decoding_state.h">
       <Filter>video_coding</Filter>
     </ClInclude>
@@ -189,10 +219,22 @@
     <ClInclude Include="video_coding\frame_buffer.h">
       <Filter>video_coding</Filter>
     </ClInclude>
+    <ClInclude Include="video_coding\frame_buffer2.h">
+      <Filter>video_coding</Filter>
+    </ClInclude>
+    <ClInclude Include="video_coding\frame_object.h">
+      <Filter>video_coding</Filter>
+    </ClInclude>
+    <ClInclude Include="video_coding\rtp_frame_reference_finder.h">
+      <Filter>video_coding</Filter>
+    </ClInclude>
     <ClInclude Include="video_coding\generic_decoder.h">
       <Filter>video_coding</Filter>
     </ClInclude>
     <ClInclude Include="video_coding\generic_encoder.h">
+      <Filter>video_coding</Filter>
+    </ClInclude>
+    <ClInclude Include="video_coding\histogram.h">
       <Filter>video_coding</Filter>
     </ClInclude>
     <ClInclude Include="video_coding\inter_frame_delay.h">
@@ -219,13 +261,19 @@
     <ClInclude Include="video_coding\nack_fec_tables.h">
       <Filter>video_coding</Filter>
     </ClInclude>
+    <ClInclude Include="video_coding\nack_module.h">
+      <Filter>video_coding</Filter>
+    </ClInclude>
     <ClInclude Include="video_coding\packet.h">
       <Filter>video_coding</Filter>
     </ClInclude>
-    <ClInclude Include="video_coding\qm_select_data.h">
+    <ClInclude Include="video_coding\packet_buffer.h">
       <Filter>video_coding</Filter>
     </ClInclude>
-    <ClInclude Include="video_coding\qm_select.h">
+    <ClInclude Include="video_coding\percentile_filter.h">
+      <Filter>video_coding</Filter>
+    </ClInclude>
+    <ClInclude Include="video_coding\protection_bitrate_calculator.h">
       <Filter>video_coding</Filter>
     </ClInclude>
     <ClInclude Include="video_coding\receiver.h">
@@ -252,9 +300,6 @@
     <ClCompile Include="video_coding\codec_timer.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
-    <ClCompile Include="video_coding\content_metrics_processing.cc">
-      <Filter>video_coding</Filter>
-    </ClCompile>
     <ClCompile Include="video_coding\decoding_state.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
@@ -264,6 +309,15 @@
     <ClCompile Include="video_coding\frame_buffer.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
+    <ClCompile Include="video_coding\frame_buffer2.cc">
+      <Filter>video_coding</Filter>
+    </ClCompile>
+    <ClCompile Include="video_coding\frame_object.cc">
+      <Filter>video_coding</Filter>
+    </ClCompile>
+    <ClCompile Include="video_coding\rtp_frame_reference_finder.cc">
+      <Filter>video_coding</Filter>
+    </ClCompile>
     <ClCompile Include="video_coding\generic_decoder.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
@@ -271,6 +325,9 @@
       <Filter>video_coding</Filter>
     </ClCompile>
     <ClCompile Include="video_coding\inter_frame_delay.cc">
+      <Filter>video_coding</Filter>
+    </ClCompile>
+    <ClCompile Include="video_coding\histogram.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
     <ClCompile Include="video_coding\jitter_buffer.cc">
@@ -285,10 +342,19 @@
     <ClCompile Include="video_coding\media_optimization.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
+    <ClCompile Include="video_coding\protection_bitrate_calculator.cc">
+      <Filter>video_coding</Filter>
+    </ClCompile>
+    <ClCompile Include="video_coding\nack_module.cc">
+      <Filter>video_coding</Filter>
+    </ClCompile>
     <ClCompile Include="video_coding\packet.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
-    <ClCompile Include="video_coding\qm_select.cc">
+    <ClCompile Include="video_coding\packet_buffer.cc">
+      <Filter>video_coding</Filter>
+    </ClCompile>
+    <ClCompile Include="video_coding\percentile_filter.cc">
       <Filter>video_coding</Filter>
     </ClCompile>
     <ClCompile Include="video_coding\receiver.cc">

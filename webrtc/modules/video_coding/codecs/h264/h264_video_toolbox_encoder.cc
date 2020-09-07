@@ -212,7 +212,7 @@ namespace webrtc {
 H264VideoToolboxEncoder::H264VideoToolboxEncoder()
     : callback_(nullptr),
       compression_session_(nullptr),
-      bitrate_adjuster_(Clock::GetRealTimeClock(), .5, .95) , fps_(20){}
+      bitrate_adjuster_(Clock::GetRealTimeClock(), .5, .95) {}
 
 H264VideoToolboxEncoder::~H264VideoToolboxEncoder() {
   DestroyCompressionSession();
@@ -236,8 +236,7 @@ int H264VideoToolboxEncoder::InitEncode(const VideoCodec* codec_settings,
     height_ = res.height;
   }
   // We can only set average bitrate on the HW encoder.
-  target_bitrate_bps_ = codec_settings->startBitrate * 1000;
-  fps_ = codec_settings->maxFramerate;
+  target_bitrate_bps_ = codec_settings->startBitrate;
   bitrate_adjuster_.SetTargetBitrateBps(target_bitrate_bps_);
 
   // TODO(tkchin): Try setting payload size via
@@ -379,7 +378,6 @@ int H264VideoToolboxEncoder::SetChannelParameters(uint32_t packet_loss,
 int H264VideoToolboxEncoder::SetRates(uint32_t new_bitrate_kbit,
                                       uint32_t frame_rate) {
   target_bitrate_bps_ = 1000 * new_bitrate_kbit;
-  fps_ = frame_rate;
   bitrate_adjuster_.SetTargetBitrateBps(target_bitrate_bps_);
   SetBitrateBps(bitrate_adjuster_.GetAdjustedBitrateBps());
 
@@ -459,7 +457,6 @@ void H264VideoToolboxEncoder::ConfigureCompressionSession() {
   internal::SetVTSessionProperty(compression_session_,
                                  kVTCompressionPropertyKey_AllowFrameReordering,
                                  false);
-  internal::SetVTSessionProperty(compression_session_, kVTCompressionPropertyKey_ExpectedFrameRate, fps_);    //@Eric - add for 20 fps
   SetEncoderBitrateBps(target_bitrate_bps_);
   // TODO(tkchin): Look at entropy mode and colorspace matrices.
   // TODO(tkchin): Investigate to see if there's any way to make this work.
@@ -468,14 +465,15 @@ void H264VideoToolboxEncoder::ConfigureCompressionSession() {
   // internal::SetVTSessionProperty(compression_session_,
   //     kVTCompressionPropertyKey_MaxFrameDelayCount,
   //     1);
+
   // Set a relatively large value for keyframe emission (7200 frames or
   // 4 minutes).
-   internal::SetVTSessionProperty(
-       compression_session_,
-       kVTCompressionPropertyKey_MaxKeyFrameInterval, fps_*3);
   internal::SetVTSessionProperty(
       compression_session_,
-      kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, 3);
+      kVTCompressionPropertyKey_MaxKeyFrameInterval, 7200);
+  internal::SetVTSessionProperty(
+      compression_session_,
+      kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, 240);
 }
 
 void H264VideoToolboxEncoder::DestroyCompressionSession() {

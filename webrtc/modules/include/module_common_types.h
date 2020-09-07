@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
@@ -385,7 +385,7 @@ class RTPFragmentationHeader {
   }
 
   void VerifyAndAllocateFragmentationHeader(const size_t size) {
-    assert(size <= std::numeric_limits<uint16_t>::max());
+    assert(size <= (std::numeric_limits<uint16_t>::max)());
     const uint16_t size16 = static_cast<uint16_t>(size);
     if (fragmentationVectorSize < size16) {
       uint16_t oldVectorSize = fragmentationVectorSize;

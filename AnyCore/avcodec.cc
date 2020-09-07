@@ -16,9 +16,11 @@
 * your programs, too.
 * See the GNU LICENSE file for more info.
 */
+#include <iostream>
 #include "avcodec.h"
 #include "webrtc/media/base/videoframe.h"
 #include "webrtc/modules/video_coding/codecs/h264/include/h264.h"
+
 
 static const size_t kEventMaxWaitTimeMs = 100;
 static const size_t kMaxDataSizeSamples = 3840;
@@ -87,6 +89,14 @@ bool A_AACEncoder::Init(int num_channels, int sample_rate, int pcm_bit_size)
 	audio_record_sample_hz_ = sample_rate;
 	audio_record_channels_ = num_channels;
 	encoder_ = aac_encoder_open(num_channels, sample_rate, pcm_bit_size, false);
+
+	std::cout << "aacencode init " << num_channels << sample_rate << pcm_bit_size;
+
+	//m_pNSinst = WebRtcNsx_Create();
+	//if (m_pNSinst) {
+	//	WebRtcNsx_Init(m_pNSinst, pcm_bit_size * 1000);
+	//	WebRtcNsx_set_policy(m_pNSinst, 2);
+	//}
 	return true;
 }
 
@@ -124,6 +134,41 @@ int A_AACEncoder::Encode(const void* audioSamples, const size_t nSamples, const 
 		if(muted_)
 		{// mute audio
 			memset((uint8_t*)audioSamples, 0, nSamples*nBytesPerSample*nChannels);
+		}
+		else
+		{
+			const short NOISE_SIZE = 49;
+			short* pdata = (short*)audioSamples;
+			for (size_t i = 0; i < nSamples*nBytesPerSample*nChannels/2; ++i) {
+				if (pdata[i]<NOISE_SIZE && pdata[i]>-NOISE_SIZE) {
+					pdata[i] = 0;
+				}
+				else if (pdata[i]>NOISE_SIZE) {
+					pdata[i] = pdata[i] - NOISE_SIZE;
+				}
+				else if (pdata[i]<-NOISE_SIZE) {
+					pdata[i] = pdata[i] + NOISE_SIZE;
+				}
+			}
+
+			//unsigned char *pInData = (unsigned char *)audioSamples;
+			//int nInLen = nSamples*nBytesPerSample*nChannels;
+			//for (size_t i = 0; i < nSamples*nBytesPerSample*nChannels; i += 160) {
+			//	if (nInLen - i >= 320) {
+			//		short shBufferIn[160] = { 0 };
+			//		short shBufferOut[160] = { 0 };
+			//		memcpy(shBufferIn, (char*)(pInData + i), 160 * sizeof(short));
+
+			//		//void WebRtcNsx_Process(NsxHandle* nsxInst,
+			//		//	const short* const* speechFrame,
+			//		//	int num_bands,
+			//		//	short* const* outFrame);
+
+			//		memcpy(shBufferIn, (char*)(pInData + i), 160 * sizeof(short));
+			//		WebRtcNsx_Process(m_pNSinst, (const short* const*)shBufferIn, 5, (short* const*)shBufferOut);
+			//		memcpy(pInData + i, shBufferOut, 160 * sizeof(short));
+			//	}
+			//}
 		}
 		status = aac_encoder_encode_frame(encoder_, (uint8_t*)audioSamples, nSamples*nBytesPerSample*nChannels, encoded, &outlen);
 		if(outlen > 0)

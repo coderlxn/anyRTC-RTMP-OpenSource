@@ -20,6 +20,7 @@
 #include "srs_librtmp.h"
 #include <assert.h>
 #include "webrtc/base/logging.h"
+#include <iostream>
 
 #define MAX_RETRY_TIME	3
 AnyRtmpPush::AnyRtmpPush(AnyRtmpushCallback&callback, const std::string&url)

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -51,8 +51,6 @@ class H264EncoderImpl : public H264Encoder {
   int32_t Encode(const VideoFrame& frame,
                  const CodecSpecificInfo* codec_specific_info,
                  const std::vector<FrameType>* frame_types) override;
-
-  const char* ImplementationName() const override;
 
   // Unsupported / Do nothing.
   int32_t SetChannelParameters(uint32_t packet_loss, int64_t rtt) override;

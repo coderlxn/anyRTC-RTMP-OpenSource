@@ -16,6 +16,7 @@
 * your programs, too.
 * See the GNU LICENSE file for more info.
 */
+#include <iostream>
 #include "anyrtmpstreamer.h"
 #include "webrtc/media/base/videocommon.h"
 #include "webrtc/media/engine/webrtcvideocapturerfactory.h"
@@ -33,7 +34,7 @@ AnyRtmpStreamerImpl::AnyRtmpStreamerImpl(AnyRtmpstreamerEvent&callback)
 , a_aac_encoder_(NULL)
 , a_muted_(false)
 , a_enabled_(false)
-, a_sample_hz_(44100)
+, a_sample_hz_(48000)
 , a_channels_(1)
 , v_h264_encoder_(NULL)
 , v_width(640)
@@ -143,6 +144,7 @@ void AnyRtmpStreamerImpl::StopStream()
 
 void AnyRtmpStreamerImpl::OnEncodeDataCallback(bool audio, uint8_t *p, uint32_t length, uint32_t ts)
 {
+	//std::cout << "rtmp stream encoded data " << audio << ts << std::endl;
 	if(audio)
 	{
 		OnAACData(p, length, ts);

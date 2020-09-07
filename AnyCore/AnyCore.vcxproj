@@ -27,7 +27,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -41,9 +41,9 @@
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -95,12 +95,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;NOMINMAX;WEBRTC_WIN;_CRT_SECURE_NO_WARNINGS;WEBRTC_INCLUDE_INTERNAL_AUDIO_DEVICE;LIV_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../;./srs_librtmp;../third_party/faac-1.28/include;../third_party/mp4v2/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;winmm.lib;Strmiids.lib;Quartz.lib;dmoguids.lib;msdmo.lib;wmcodecdspuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;Strmiids.lib;Quartz.lib;dmoguids.lib;msdmo.lib;wmcodecdspuuid.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audioproc_debug_proto.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_coding_module.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_conference_mixer.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_decoder_factory_interface.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_decoder_interface.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_device.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_encoder_interface.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_processing.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\audio_processing_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\bitrate_controller.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\boringssl.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\boringssl_asm.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\builtin_audio_decoder_factory.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\cng.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\command_line_parser.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\common_audio.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\common_audio_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\common_video.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\congestion_controller.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\desktop_capture.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\desktop_capture_differ_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\directshow_baseclasses.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\field_trial_default.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\frame_editing_lib.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\g711.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\g722.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\genperf_libs.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\ilbc.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\isac.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\isac_common.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\isac_fix.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\jsoncpp.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libjingle_peerconnection.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libjpeg.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libsrtp.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libstunprober.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libvpx.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libvpx_intrinsics_avx.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libvpx_intrinsics_avx2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libvpx_intrinsics_mmx.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libvpx_intrinsics_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libvpx_intrinsics_sse4_1.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libvpx_intrinsics_ssse3.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\libyuv.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\media_file.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\metrics_default.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\neteq.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\openmax_dl.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\opus.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\paced_sender.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\pcm16b.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\protobuf_full_do_not_use.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\protobuf_lite.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\protoc_lib.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\red.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\remote_bitrate_estimator.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rent_a_codec.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_base.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_base_approved.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_event_log.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_event_log_parser.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_event_log_proto.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_media.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_p2p.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_pc.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtc_task_queue.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\rtp_rtcp.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\system_wrappers.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\usrsctplib.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\video_capture.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\video_capture_module.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\video_capture_module_internal_impl.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\video_coding_utility.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\video_processing.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\video_processing_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\video_quality_analysis.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\voice_engine.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_common.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_h264.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_i420.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_opus.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_utility.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_video_coding.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_vp8.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Debug\lib\webrtc_vp9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\AnyCore.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -132,7 +132,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;NOMINMAX;WEBRTC_WIN;_CRT_SECURE_NO_WARNINGS;WEBRTC_INCLUDE_INTERNAL_AUDIO_DEVICE;LIV_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>../;./srs_librtmp;../third_party/faac-1.28/include;../third_party/mp4v2/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -140,8 +140,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ws2_32.lib;winmm.lib;Strmiids.lib;Quartz.lib;dmoguids.lib;msdmo.lib;wmcodecdspuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;Strmiids.lib;Quartz.lib;dmoguids.lib;msdmo.lib;wmcodecdspuuid.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audioproc_debug_proto.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_coding_module.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_conference_mixer.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_decoder_factory_interface.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_decoder_interface.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_device.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_encoder_interface.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_processing.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\audio_processing_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\bitrate_controller.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\boringssl.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\boringssl_asm.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\builtin_audio_decoder_factory.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\cng.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\command_line_parser.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\common_audio.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\common_audio_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\common_video.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\congestion_controller.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\desktop_capture.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\desktop_capture_differ_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\directshow_baseclasses.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\field_trial_default.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\frame_editing_lib.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\g711.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\g722.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\genperf_libs.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\ilbc.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\isac.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\isac_common.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\isac_fix.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\jsoncpp.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libjingle_peerconnection.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libjpeg.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libsrtp.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libstunprober.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libvpx.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libvpx_intrinsics_avx.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libvpx_intrinsics_avx2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libvpx_intrinsics_mmx.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libvpx_intrinsics_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libvpx_intrinsics_sse4_1.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libvpx_intrinsics_ssse3.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\libyuv.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\media_file.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\metrics_default.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\neteq.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\openmax_dl.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\opus.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\paced_sender.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\pcm16b.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\protobuf_full_do_not_use.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\protobuf_lite.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\protoc_lib.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\red.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\remote_bitrate_estimator.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rent_a_codec.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_base.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_base_approved.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_event_log.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_event_log_parser.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_event_log_proto.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_media.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_p2p.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_pc.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtc_task_queue.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\rtp_rtcp.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\system_wrappers.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\usrsctplib.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\video_capture.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\video_capture_module.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\video_capture_module_internal_impl.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\video_coding_utility.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\video_processing.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\video_processing_sse2.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\video_quality_analysis.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\voice_engine.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_common.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_h264.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_i420.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_opus.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_utility.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_video_coding.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_vp8.lib;D:\Projects\anyRTC-RTMP-OpenSource\out\Win32\Release\lib\webrtc_vp9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\AnyCore.def</ModuleDefinitionFile>
+      <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -169,6 +170,10 @@
   <ItemGroup>
     <ClCompile Include="aacdecode.cc" />
     <ClCompile Include="aacencode.cc" />
+    <ClCompile Include="AudioCaptureCore.cpp" />
+    <ClCompile Include="AudioCaptureModule.cpp" />
+    <ClCompile Include="audio_capture_core_win.cc" />
+    <ClCompile Include="audio_device_capture_impl.cc" />
     <ClCompile Include="avcodec.cc" />
     <ClCompile Include="anyrtmpcore.cc" />
     <ClCompile Include="anyrtmplayer.cc" />
@@ -183,6 +188,10 @@
     <ClCompile Include="videofilter.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioCaptureCore.h" />
+    <ClInclude Include="AudioCaptureModule.h" />
+    <ClInclude Include="audio_capture_core_win.h" />
+    <ClInclude Include="audio_device_capture_impl.h" />
     <ClInclude Include="avcodec.h" />
     <ClInclude Include="anyrtmpcore.h" />
     <ClInclude Include="anyrtmplayer.h" />
@@ -212,56 +221,8 @@
     <ProjectReference Include="..\third_party\libyuv\libyuv.vcxproj">
       <Project>{e4505a22-7591-fedf-6b9f-4ff8ab727ff9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\third_party\winsdk_samples\directshow_baseclasses.vcxproj">
-      <Project>{b49de8dd-f78d-f7cf-052d-8f9aed62d088}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\VideoRender\win32_render.vcxproj">
       <Project>{1ad2b7cf-c61c-43cd-8a27-4c52ef9cc5d3}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\base\rtc_base.vcxproj">
-      <Project>{93f855f4-ee6f-f00d-f4a3-35577b1d5f76}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\base\rtc_base_approved.vcxproj">
-      <Project>{510deddc-ed2f-0a3b-abe1-f7f1e6d75cf8}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\common_audio\common_audio.vcxproj">
-      <Project>{39fe2bb0-c2e7-db9c-d514-19b221f3ca00}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\common_audio\common_audio_sse2.vcxproj">
-      <Project>{b6b37b26-252c-247d-dba3-d03511ac9509}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\common_video\common_video.vcxproj">
-      <Project>{ac613f26-3b4f-2df0-f78c-52b6d0770c2d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\media\rtc_media.vcxproj">
-      <Project>{cc4cc1bb-4534-3322-5d30-6f7b749e7cde}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\modules\audio_coding_module.vcxproj">
-      <Project>{1deac0d1-003d-95f6-6693-ef0f1a5c733a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\modules\audio_device.vcxproj">
-      <Project>{e7e494c8-f0d0-4376-4006-c691bb4233ef}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\modules\video_capture_module.vcxproj">
-      <Project>{bd794cba-b6ac-1a8f-784e-89f56fda8b8d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\modules\video_capture_module_internal_impl.vcxproj">
-      <Project>{58c4e66e-f613-82e0-c039-7a453bcac1e4}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\modules\video_coding\utility\video_coding_utility.vcxproj">
-      <Project>{e3cc8540-9e4f-66f9-d430-efdae52dedac}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\modules\webrtc_h264.vcxproj">
-      <Project>{c93cb6a3-741a-2433-10d3-fc2ce462281b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\system_wrappers\metrics_default.vcxproj">
-      <Project>{5569b280-3a89-5837-bd37-c3a976c6f597}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\system_wrappers\system_wrappers.vcxproj">
-      <Project>{16fe3fd5-aa01-bd2a-2bff-7785ffededec}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\webrtc\webrtc_common.vcxproj">
-      <Project>{4e00d9e2-1f74-8d2e-1878-dcfe215138f5}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

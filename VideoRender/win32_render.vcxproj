@@ -30,18 +30,6 @@
     <ProjectReference Include="..\..\third_party\libyuv\libyuv.vcxproj">
       <Project>{e4505a22-7591-fedf-6b9f-4ff8ab727ff9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\webrtc\base\rtc_base.vcxproj">
-      <Project>{93f855f4-ee6f-f00d-f4a3-35577b1d5f76}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\webrtc\base\rtc_base_approved.vcxproj">
-      <Project>{510deddc-ed2f-0a3b-abe1-f7f1e6d75cf8}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\webrtc\common_video\common_video.vcxproj">
-      <Project>{ac613f26-3b4f-2df0-f78c-52b6d0770c2d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\webrtc\system_wrappers\system_wrappers.vcxproj">
-      <Project>{16fe3fd5-aa01-bd2a-2bff-7785ffededec}</Project>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1AD2B7CF-C61C-43CD-8A27-4C52EF9CC5D3}</ProjectGuid>
@@ -68,7 +56,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -118,7 +106,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;WIN32_RENDER_EXPORTS;WEBRTC_WIN;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>../;$(DXSDK_DIR)\include;../third_party/hwcodec/MediaSDK/include;../third_party/hwcodec/VIDCOM/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -156,7 +144,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;WIN32_RENDER_EXPORTS;WEBRTC_WIN;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../;$(DXSDK_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

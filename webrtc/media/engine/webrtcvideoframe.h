@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 The WebRTC@AnyRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -24,24 +24,16 @@ namespace cricket {
 
 struct CapturedFrame;
 
-// TODO(nisse): This class will be deleted when the cricket::VideoFrame and
-// webrtc::VideoFrame classes are merged. See
-// https://bugs.chromium.org/p/webrtc/issues/detail?id=5682. Try to use only the
-// preferred constructor, and the non-deprecated methods of the VideoFrame base
-// class.
 class WebRtcVideoFrame : public VideoFrame {
  public:
-  // TODO(nisse): Deprecated. Using the default constructor violates the
-  // reasonable assumption that video_frame_buffer() returns a valid buffer.
   WebRtcVideoFrame();
 
-  // Preferred constructor.
+  // Preferred construction, with microsecond timestamp.
   WebRtcVideoFrame(const rtc::scoped_refptr<webrtc::VideoFrameBuffer>& buffer,
                    webrtc::VideoRotation rotation,
                    int64_t timestamp_us);
 
-  // TODO(nisse): Deprecated, delete as soon as all callers have switched to the
-  // above constructor with microsecond timestamp.
+  // TODO(nisse): Deprecate/delete.
   WebRtcVideoFrame(const rtc::scoped_refptr<webrtc::VideoFrameBuffer>& buffer,
                    int64_t time_stamp_ns,
                    webrtc::VideoRotation rotation);
@@ -62,16 +54,14 @@ class WebRtcVideoFrame : public VideoFrame {
             int64_t time_stamp_ns,
             webrtc::VideoRotation rotation);
 
-  // TODO(nisse): We're moving to have all timestamps use the same
-  // time scale as rtc::TimeMicros. However, this method is used by
-  // WebRtcVideoFrameFactory::CreateAliasedFrame this code path
-  // currently does not conform to the new timestamp conventions and
-  // may use the camera's own clock instead. It's unclear if this
-  // should be fixed, or if instead all of the VideoFrameFactory
-  // abstraction should be eliminated.
+  // The timestamp of the captured frame is expected to use the same
+  // timescale and epoch as rtc::Time.
+  // TODO(nisse): Consider adding a warning message, or even an RTC_DCHECK, if
+  // the time is too far off.
   bool Init(const CapturedFrame* frame, int dw, int dh, bool apply_rotation);
 
   void InitToEmptyBuffer(int w, int h);
+  void InitToEmptyBuffer(int w, int h, int64_t time_stamp_ns);
 
   int width() const override;
   int height() const override;
@@ -95,6 +85,9 @@ class WebRtcVideoFrame : public VideoFrame {
   const VideoFrame* GetCopyWithRotationApplied() const override;
 
  protected:
+  void set_rotation(webrtc::VideoRotation rotation) override {
+    rotation_ = rotation;
+  }
   // Creates a frame from a raw sample with FourCC |format| and size |w| x |h|.
   // |h| can be negative indicating a vertically flipped image.
   // |dw| is destination width; can be less than |w| if cropping is desired.
@@ -112,8 +105,8 @@ class WebRtcVideoFrame : public VideoFrame {
              bool apply_rotation);
 
  private:
-  // Tests mutate |rotation_|, so the base test class is a friend.
-  friend class WebRtcVideoFrameTest;
+  VideoFrame* CreateEmptyFrame(int w, int h,
+                               int64_t time_stamp_ns) const override;
 
   // An opaque reference counted handle that stores the pixel data.
   rtc::scoped_refptr<webrtc::VideoFrameBuffer> video_frame_buffer_;

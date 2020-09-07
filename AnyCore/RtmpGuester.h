@@ -48,6 +48,8 @@ public:
 	virtual void StartRtmpPlay(const char* url, void* render) = 0;
 	virtual void StopRtmpPlay() = 0;
 
+	virtual void SetAudioEnable(bool enabled) = 0;
+
 protected:
 	virtual void* GotSelfPtr() = 0;
 

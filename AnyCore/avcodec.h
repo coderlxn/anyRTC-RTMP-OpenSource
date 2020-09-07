@@ -32,6 +32,8 @@
 #include "webrtc/modules/audio_device/include/audio_device.h"
 #include "webrtc/media/engine/webrtcvideodecoderfactory.h"
 #include "webrtc/media/engine/webrtcvideoencoderfactory.h"
+#include "webrtc\modules/audio_processing/ns\noise_suppression.h"
+#include "webrtc\modules/audio_processing/ns/noise_suppression_x.h"
 #include "pluginaac.h"
 
 namespace webrtc {
@@ -70,11 +72,13 @@ private:
 	bool        muted_;
     bool        encoded_;
 
+	//NsxHandle* m_pNSinst;
+
 	aac_enc_t	encoder_;
 
 	webrtc::acm2::ACMResampler resampler_record_;
 	int						audio_record_sample_hz_;
-	int						audio_record_channels_;
+	int						audio_record_channels_;        
 
 	rtc::CriticalSection buffer_critsect_;
 	std::list<void*>	audio_buffer_;
