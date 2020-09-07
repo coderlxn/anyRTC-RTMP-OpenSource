@@ -96,6 +96,11 @@ public:
 		m_frames.clear();
 	}
 
+	bool empty() {
+		webrtc::CriticalSectionScoped critScoped(&_critSect);
+		return m_frames.empty();
+	}
+
 	virtual AudioFrameInfo GetAudioFrameWithMuted(int32_t id, AudioFrame* audio_frame) {
 		return GetAudioFrame(id, audio_frame) == -1 ?
 			AudioFrameInfo::kError :
@@ -202,6 +207,8 @@ protected:
 	AVAudioTrackCallback	*audio_track_callback_;
 	int						audio_track_sample_hz_;
 	int						audio_track_channels_;
+
+	int						audio_capture_dis = 0; //背景声的最后更新时间，如果超过3s,并且没数据，则不进行混音
 
 	bool					microphone_enable_ = true;
 	bool					bgm_enable_ = true;

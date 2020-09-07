@@ -66,6 +66,7 @@ AnyRtmpCore::AnyRtmpCore()
 	audio_capture_ptr_->RegisterAudioCallback(audio_capture_mixer_ptr_.get());
 
 	audio_mixer_ = webrtc::AudioConferenceMixer::Create(0);
+	audio_mixer_->SetMinimumMixingFrequency(AudioConferenceMixer::Frequency::kFbInHz);
 	audio_mixer_->RegisterMixedStreamCallback(this);
 	audio_mixer_->SetMixabilityStatus(audio_device_mixer_ptr_.get(), true);
 	audio_mixer_->SetMixabilityStatus(audio_capture_mixer_ptr_.get(), true);
@@ -233,8 +234,8 @@ bool AnyRtmpCore::CheckAudioRecordStatus()
 	//目前只处理麦克风的声音，背景声在没有音乐播放的情况下会是空白的
 	if (microphone_enable_ && bgm_enable_) {
 		int dt1 = timep - audio_device_mixer_ptr_->m_timestamp;
-		//int dt2 = timep - audio_capture_mixer_ptr_->m_timestamp;
-		//std::cout << "CheckAudioRecordStatus1 " << timep << "  " << dt1 << "  " << dt2 << std::endl;
+		audio_capture_dis = timep - audio_capture_mixer_ptr_->m_timestamp;
+		//std::cout << "CheckAudioRecordStatus1 " << timep << "  " << dt1 << "  " << audio_capture_dis << std::endl;
 		return dt1 < 5;
 	}
 	else if (microphone_enable_)  {
@@ -324,16 +325,40 @@ int32_t AnyRtmpCore::RecordedDataIsAvailable(const void* audioSamples, const siz
 	const size_t nBytesPerSample, const size_t nChannels, const uint32_t samplesPerSec, const uint32_t totalDelayMS,
 	const int32_t clockDrift, const uint32_t currentMicLevel, const bool keyPressed, uint32_t& newMicLevel)
 {
-	//std::cout << "[-----------] record data avaliable " << nSamples << nBytesPerSample << nChannels << samplesPerSec << std::endl;
+	//std::cout << "[-----------] record data avaliable " << microphone_enable_ << bgm_enable_ << audio_capture_dis  << audio_capture_mixer_ptr_->empty() << std::endl;
 	rtc::CritScope cs(&cs_audio_record_);
-
+	
 	if (microphone_enable_ && bgm_enable_) {
-		audio_device_mixer_ptr_->RecordedDataIsAvailable(audioSamples, nSamples,
-			nBytesPerSample, nChannels, samplesPerSec, totalDelayMS,
-			clockDrift, currentMicLevel, keyPressed, newMicLevel);
-		if (audio_mixer_) {
-			audio_mixer_->Process();
-		}		
+
+		if (audio_capture_dis > 3 && audio_capture_mixer_ptr_->empty()) {
+			//超过3s没有背景声，则不再混音
+			time_t timep;
+			time(&timep);
+			m_timestamp = timep;
+
+			audio_device_mixer_ptr_->m_timestamp = m_timestamp;
+
+			// 当只有一种声音时，不进行混音
+			if (audio_record_callback_) {
+				if (audio_record_sample_hz_ != samplesPerSec || nChannels != audio_record_channels_) {
+					int16_t temp_output[kMaxDataSizeSamples];
+					int samples_per_channel_int = resampler_record_.Resample10Msec((int16_t*)audioSamples, samplesPerSec * nChannels,
+						audio_record_sample_hz_ * audio_record_channels_, 1, kMaxDataSizeSamples, temp_output);
+					audio_record_callback_->OnRecordAudio(temp_output, audio_record_sample_hz_ / 100, nBytesPerSample, audio_record_channels_, audio_record_sample_hz_, totalDelayMS);
+				}
+				else {
+					audio_record_callback_->OnRecordAudio(audioSamples, nSamples, nBytesPerSample, audio_record_channels_, samplesPerSec, totalDelayMS);
+				}
+			}
+		}
+		else {
+			audio_device_mixer_ptr_->RecordedDataIsAvailable(audioSamples, nSamples,
+				nBytesPerSample, nChannels, samplesPerSec, totalDelayMS,
+				clockDrift, currentMicLevel, keyPressed, newMicLevel);
+			if (audio_mixer_) {
+				audio_mixer_->Process();
+			}
+		}			
 	}
 	else
 	{
